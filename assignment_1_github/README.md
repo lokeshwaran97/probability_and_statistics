@@ -27,4 +27,6 @@ Fit an appropriate statistical distribution to the data for **Battery Type B**, 
 ### Task 2c: Determine the Free Replacement Lifetime Threshold for Battery Type B
 The garage is offering to replace any **Type B batteries** with a lifetime less than or equal to **M months** for free. Determine the value of **M** (to 2 decimal places) such that the probability of replacing a Type B battery for free is **0.03**.
 
-## Solution
+## Solution 
+
+
