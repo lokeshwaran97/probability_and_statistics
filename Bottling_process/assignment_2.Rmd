@@ -1,0 +1,135 @@
+---
+title: "MTHS3003 Portfolio 2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen=999)
+```
+
+## Instructions
+
+1. Enter your student number in place of `12345678` in the **R** block below:
+```{r} 
+Student_Number=20497614
+```
+
+Student Number: `r Student_Number`
+
+2. Load in the data sets **Bottle_New_Z.csv** and **Bottle_Check_Z.csv** with Z replaced by the **sixth** number in your student number.
+```{r}
+# Load in data sets: Use read.csv
+data<-read.csv("Bottle_New_6.csv")
+data2<-read.csv("Bottle_Check_6.csv")
+```
+
+Do not change the Mark or Feedback Comments.
+
+### Data Set 1 
+
+a. 
+
+```{r}
+new_bottle<-data$x
+mean_bottle<-mean(new_bottle)
+variance_bottle<-var(new_bottle)
+print(paste("mean :", mean_bottle))
+print(paste("variance :", variance_bottle))
+```
+
+**Mark (out of 2):** `r m1=NA`  
+**Feedback Comment:**  
+
+b. 
+
+```{r}
+alpha <-0.05
+t_test_value<-t.test(new_bottle)
+print(paste("95% confidence interval is [", t_test_value$conf.int[1], " , ", t_test_value$conf.int[2],"]"))
+print(paste("mean :", mean_bottle))
+```
+
+**Mark (out of 3):** `r m2=NA`  
+**Feedback Comment:**  
+
+c. 
+
+```{r}
+significance_level = 0.1
+ans<-t.test(new_bottle, mu=750, alternative ="greater", conf.level = 0.90)
+print("the wine bottle should contain 750ml of wine. Hence the wine filled above that level were considered to be overfilled")
+p_value<-ans$p.value
+print(paste("The probability value is ", p_value))
+print(paste("confidence interval is [", ans$conf.int[1], " , ", ans$conf.int[2],"]"))
+if(p_value < significance_level){
+  print("The hypothesis is rejected because probability value less than significance value")
+}else{
+  print("The hypothesis is accepted because probability value greater than significance value")
+}
+```
+
+**Mark (out of 4):** `r m3=NA`  
+**Feedback Comment:**  
+
+### Data Set 2 
+
+a. 
+```{r}
+s_d<-2.1
+pAA<-rep(NA, 14)
+sample_size<-10
+mu<-750
+for(i in 1:14){
+  machineRow<-data2[[paste("Machine.",i, sep = "")]]
+  sample_mean<-mean(machineRow)
+  standard_dev_mean<-s_d/sqrt(sample_size)
+  z_score<-abs((sample_mean - mu)/standard_dev_mean)
+  pAA[i]<-2*pnorm(q=z_score, lower.tail = FALSE)
+  print(paste("Probability values for machine", i, " :", pAA[i]))
+}
+
+
+```
+
+
+
+**Mark (out of 6):** `r m4=NA`  
+**Feedback Comment:**  
+
+b. 
+
+```{r}
+N<-14
+alpha<-0.04
+plot(sort(pAA), xlab = "machines", ylab = "probability value")
+lines(1:N,alpha*(1:N)/N,col=2)
+```
+```{r}
+N<-14
+sorted_p<-sort(pAA)
+q_value<-rep(NA, N)
+dit<-c()
+for(i in 1 : N){
+  q_value[i]<-(i/N)*alpha
+  if(sorted_p[i] < q_value[i]){
+    dit<-append(dit, sorted_p[i])
+  }
+}
+print("hypothesis rejected machines")
+for(i in 1 : N){
+  if(is.element(pAA[i], dit)){
+    print(paste("machine", i))
+  }
+}
+
+
+```
+
+
+
+**Mark (out of 5):** `r m5=NA`  
+**Feedback Comment:**  
+
+**Total Mark (out of 20):** `r m1+m2+m3+m4+m5`  
+**Feedback Comment:**
