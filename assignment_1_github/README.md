@@ -21,6 +21,9 @@ Using the data from 2021, calculate the probability that there will be **23 week
 ### Task 2a: Compare Lifetimes of Battery Types A and B
 Compare the lifetimes (in months) of **Battery Type A** and **Battery Type B**, providing a statistical comparison between the two.
 
+
+## Solution
+
 ### Task 2b: Fit a Distribution for Battery Type B
 Fit an appropriate statistical distribution to the data for **Battery Type B**, and estimate its parameters.
 
