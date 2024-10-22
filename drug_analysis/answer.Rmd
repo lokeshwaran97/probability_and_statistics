@@ -1,0 +1,152 @@
+---
+title: "MTHS3003 Portfolio 3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen=999)
+```
+
+## Instructions
+
+1. Enter your student number in place of `12345678` in the **R** block below:
+```{r} 
+Student_Number=20497614
+```
+
+Student Number: `r Student_Number`
+
+2. Load in the data sets **Drug_New_Z.csv** and **Drug_A_Z.csv** with Z replaced by the **fifth** number in your student number.
+```{r}
+# Load in data sets: Use read.csv
+drug_data<-read.csv("Drug_new_7.csv")
+drug_a<-read.csv("Drug_A_7.csv")
+```
+
+Do not change the Mark or Feedback Comments.
+
+### Data Set 1 
+
+a. 
+
+```{r}
+print(table(drug_data))
+```
+
+**Mark (out of 2):** `r m1=NA`  
+**Feedback Comment:**  
+
+b. 
+
+```{r}
+N<-length(drug_data$Response)
+N_X<-sum(drug_data$Drug=='X')
+N_X_Y<-sum(drug_data$Drug=='X'&drug_data$Response=='Yes')
+prob_Y_X<-N_X_Y/N_X
+print(paste("the probability of yes when given drug X is : ",prob_Y_X))
+```
+
+**Mark (out of 2):** `r m2=NA`  
+**Feedback Comment:**  
+
+c. 
+
+```{r}
+No_total<-sum(drug_data$Response=='No')
+A_total<-sum(drug_data$Drug=='A')
+Exp_A_No<-(A_total * No_total)/N
+print(paste("the expected number of no response for drug A is : ",Exp_A_No))
+```
+
+**Mark (out of 3):** `r m3=NA`  
+**Feedback Comment:**  
+
+d. 
+
+```{r}
+chi_test<-chisq.test(drug_data$Drug, drug_data$Response, correct=FALSE)
+print(paste("probability value", chi_test$p.value))
+#pchisq(q=1.523948, df=2, lower.tail=FALSE)
+if(chi_test$p.value < 0.05){
+  print("we reject the null hypothesis that there is independence between drug and improvement in health")
+}else{
+  print("we accept the null hypothesis that there is independence between drug and improvement in health")
+}
+```
+
+
+**Mark (out of 3):** `r m4=NA`  
+**Feedback Comment:**  
+
+### Data Set 2 
+
+a. 
+
+```{r}
+after<-drug_a$after
+before<-drug_a$before
+plot(before, after, xlab = "before drug", ylab = "after drug", main="well being score")
+```
+
+**Mark (out of 1):** `r m5=NA`  
+**Feedback Comment:**  
+
+b. 
+
+```{r}
+model_drug<-lm(after~before)
+alpha<-model_drug$coef[1]
+beta<-model_drug$coef[2]
+print(paste("alpha : ", alpha))
+print(paste("Beta : ", beta))
+```
+
+**Mark (out of 2):** `r m6=NA`  
+**Feedback Comment:**  
+
+c. 
+
+```{r}
+plot(before, after, xlab = "before drug", ylab = "after drug")
+abline(a=alpha, b=beta)
+```
+
+**Mark (out of 1):** `r m7=NA`  
+**Feedback Comment:**  
+
+d. 
+
+```{r}
+hist(model_drug$residuals, main="well being score before and after drug A",xlab="Residuals",freq=FALSE) # Plot 
+curve(dnorm(x,0,summary(model_drug)$sigma),-10,10,lty=2,add=TRUE)
+plot(model_drug$fitted.values,model_drug$residuals,xlab="Fitted values",ylab="Residuals",main="well being score before and after drug A")
+abline(h=0,lty=2)
+print(paste("the residual values are normally distributed and size of residual not depend on the value of fitted value hence it is a reasonable linear model  "))
+```
+
+**Mark (out of 3):** `r m8=NA`  
+**Feedback Comment:**  
+
+e. 
+
+```{r}
+pred<-predict(model_drug, newdata = drug_data[1:57,],interval="prediction")
+plot(before, after, xlab = "before drug", ylab = "after drug")
+lines(before[1:57],pred[,1],lty=1)
+lines(before[1:57],pred[,2], lty=2)
+lines(before[1:57],pred[,3], lty=2)
+
+before_wellbeing<-50
+confidence_interval<-predict(model_drug, newdata=data.frame(before=before_wellbeing), interval="prediction") 
+print("95% confidence interval")
+print(paste("lower bound : ", confidence_interval[2], " upper bound : ", confidence_interval[3]))
+print(paste("predicted value after drug is ", confidence_interval[1]))
+```
+
+**Mark (out of 3):** `r m9=NA`  
+**Feedback Comment:**
+
+
+**Total Mark (out of 20):** `r m1+m2+m3+m4+m5+m6+m7+m8+m9`  
+**Feedback Comment:**
