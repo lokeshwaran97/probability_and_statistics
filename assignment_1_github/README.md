@@ -21,11 +21,10 @@ Using the data from 2021, calculate the probability that there will be **23 week
 ### Task 2a: Compare Lifetimes of Battery Types A and B
 Compare the lifetimes (in months) of **Battery Type A** and **Battery Type B**, providing a statistical comparison between the two.
 
-
-## Solution
-
 ### Task 2b: Fit a Distribution for Battery Type B
 Fit an appropriate statistical distribution to the data for **Battery Type B**, and estimate its parameters.
 
 ### Task 2c: Determine the Free Replacement Lifetime Threshold for Battery Type B
 The garage is offering to replace any **Type B batteries** with a lifetime less than or equal to **M months** for free. Determine the value of **M** (to 2 decimal places) such that the probability of replacing a Type B battery for free is **0.03**.
+
+## Solution
