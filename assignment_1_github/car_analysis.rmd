@@ -1,0 +1,194 @@
+---
+title: "MTHS3003 Portfolio 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen=999)
+```
+
+## Instructions
+
+1. Enter your student number in place of `12345678` in the **R** block below:
+```{r} 
+Student_Number=20497614
+```
+
+Student Number: `r Student_Number`
+
+2. Load in the data sets **Car_Sales_Z.csv** and **Car_Battery_Z.csv** with Z replaced by the last number in your student number.
+```{r}
+# Load in data sets: Use read.csv
+car_sales_data<-read.csv("Car_Sales_4.csv")
+car_battery_data<-read.csv("Car_Battery_4.csv")
+library(fitdistrplus)
+
+```
+
+Do not change the Mark or Feedback Comments.
+
+### Data Set 1 
+
+a. 
+
+```{r}
+sales<-car_sales_data$x
+summary(sales)
+
+print("quartile summary")
+print(quantile(sales))
+print(paste("standard deviation for the sale is ", sd(sales), "hence there is no much variance in the sales of car"))
+print(paste("The data is left skewed and half of the data lies between median and upper quartile region. 25% of data lies between upper whiskers and lower quartile region and the other 25% of data lies between lower quartile and median, Whereas, between median and upper quartile region half of the data were present"))
+
+
+```
+```{r}
+boxplot(sales, horizontal=TRUE,xlab="sales of car")
+```
+
+**Mark (out of 4):** `r m1=NA`  
+**Feedback Comment:**  
+
+b. 
+
+```{r}
+no_of_cars_sold<-length(sales)
+no_of_brand_1_cars_sold<-sum(sales==1, na.rm=TRUE)
+prob_brand_1_sales = no_of_brand_1_cars_sold/no_of_cars_sold
+print(paste("probability of 1 car sold in a given weeks is ",prob_brand_1_sales))
+
+```
+
+**Mark (out of 2):** `r m2=NA`  
+**Feedback Comment:**  
+
+c. 
+
+```{r}
+start<-1
+end<-8
+count = 0;
+while(end <= 52){
+  count = count+1
+  start = start + 1
+  end = end + 1
+}
+mean_8_weeks<-rep(NA, count)
+variance_8_weeks<-rep(NA, count)
+
+start<-1
+end<-8
+i<-1
+while(end <= 52){
+  mean_8_weeks[i]<-mean(sales[start:end])
+  variance_8_weeks[i]<-var(sales[start:end])
+  start = start + 1
+  end = end + 1
+  i = i + 1
+}
+mean_avg_8_weeks<-median(mean_8_weeks)
+variance_avg_8_weeks<-median(variance_8_weeks)
+print(paste("value of mean for cars sold in period of 8 weeks is ", mean_avg_8_weeks))
+print(paste("value of variance for cars sold in period of 8 weeks is ", variance_avg_8_weeks))
+```
+
+
+
+**Mark (out of 2):** `r m3=NA`  
+**Feedback Comment:**  
+
+d. 
+
+```{r}
+probability_per_week_0<-sum(sales==0)/no_of_cars_sold
+prob_cdf_23weeks<-dbinom(23, size = no_of_cars_sold, prob = probability_per_week_0)
+print(paste("probability that there will be 23 weeks in 2023 where 0 Brand X cars will be sold is", prob_cdf_23weeks))
+```
+
+**Mark (out of 2):** `r m4=NA`  
+**Feedback Comment:**  
+
+### Data Set 2 
+
+a. 
+
+```{r}
+batteryA_lifetime = car_battery_data$lifetime[car_battery_data$type=='A']
+batteryB_lifetime = car_battery_data$lifetime[car_battery_data$type=='B']
+print("Distribution for both lifetime of battery A and B are right skewed. The data were distributed ")
+print(paste("mean of lifetime of battery A is ", mean(batteryA_lifetime)))
+print(paste("mean of lifetime of battery B is ", mean(batteryB_lifetime)))
+print(paste("the mean lifetime of battery of B is slightly greater than battery A"))
+print(paste("standard deviation of battery A is", sd(batteryA_lifetime)))
+print(paste("standard deviation of battery B is", sd(batteryB_lifetime)))
+print(paste("The data of battery A lifetime is dispersed more when compared to battery B lifetime"))
+print(paste("lifetime range of battery A min :", min(batteryA_lifetime), " max : ", max(batteryA_lifetime)))
+print(paste("lifetime range of battery B min :", min(batteryB_lifetime), " max : ", max(batteryB_lifetime)))
+print("the range of Battery A is higher when compared to range of Battery B lifetime")
+```
+
+```{r}
+hist(batteryA_lifetime, freq = FALSE, xlab = "Battery A lifetime", main = "Battery A")
+```
+
+```{r}
+hist(batteryB_lifetime, freq = FALSE, xlab = "Battery B lifetime", main = "Battery B")
+```
+
+**Mark (out of 4):** `r m5=NA`  
+**Feedback Comment:**  
+```{r}
+y<-fitdist(batteryB_lifetime, distr = "gamma", method = "mle")
+print(y)
+```
+
+b. 
+
+```{r}
+
+
+mean_battery_b<-mean(batteryB_lifetime)
+standard_deviation<-sd(batteryB_lifetime)
+# shape and rate values were found using fitdist method shown in the above cell
+shape<-5.3384562
+rate<-0.1183597
+print("The gamma distribution fits the data")
+print(paste("shape of the gamma distribution", shape))
+print(paste("rate of the gamma distribution", rate))
+print(paste("the mean of the curve is ", mean(batteryB_lifetime)))
+print(paste("the standard deviation of the curve is ", sd(batteryB_lifetime)))
+
+
+```
+```{r}
+hist(batteryB_lifetime, freq = FALSE)
+curve(dgamma(x, shape ,rate), 0, 250, col=2, add=TRUE)
+```
+
+**Mark (out of 4):** `r m6=NA`  
+**Feedback Comment:**
+
+
+c. 
+
+```{r}
+
+p <-0.03
+
+values = seq(15, 17, by = 1)
+month<-0
+for (value in values){
+  if(round(pgamma(value, shape, rate), 2) == p){
+    month<-value
+  }
+}
+
+ print(paste("batteries are replaced for free if the battery life is less than or equal to ", round(qgamma(0.03, shape, rate),2), " months")) 
+```
+
+**Mark (out of 2):** `r m7=NA`  
+**Feedback Comment:**
+
+**Total Mark (out of 20):** `r m1+m2+m3+m4+m5+m6+m7`  
+**Feedback Comment:**
